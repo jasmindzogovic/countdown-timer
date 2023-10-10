@@ -28,13 +28,41 @@ const items = document.querySelectorAll(".deadline-format h4");
 
 let futureDate = new Date(2023, 9, 24, 8, 0, 0);
 
-const year = futureDate.getFullYear();
-const month = futureDate.getMonth();
-const date = futureDate.getDate();
-const day = futureDate.getDay();
-const hour = futureDate.getHours();
-const minutes = futureDate.getMinutes();
+const [year, month, date, day, hour, minutes] = [
+  futureDate.getFullYear(),
+  futureDate.getMonth(),
+  futureDate.getDate(),
+  futureDate.getDay(),
+  futureDate.getHours(),
+  futureDate.getMinutes(),
+];
 
 giveaway.textContent = `Giveaway ends on ${weekdays[day]}, ${
   months[month]
 } ${date} ${year}, ${hour}:${String(minutes).padStart(2, 0)} AM`;
+
+const futureTime = futureDate.getTime();
+
+const getRemainingTime = () => {
+  setInterval(() => {
+    const today = new Date().getTime();
+    const remainder = futureTime - today;
+
+    const oneMinute = 60 * 1000;
+    const oneHour = 60 * 60 * 1000;
+    const oneDay = 24 * 60 * 60 * 1000;
+
+    let days = Math.floor(remainder / oneDay);
+    let hours = Math.floor((remainder % oneDay) / oneHour);
+    let minutes = Math.floor((remainder % oneHour) / oneMinute);
+    let secs = Math.floor((remainder % oneMinute) / 1000);
+
+    const values = [days, hours, minutes, secs];
+
+    items.forEach((item, i) => {
+      item.textContent = values[i] < 10 ? `0${values[i]}` : values[i];
+    });
+  }, 1000);
+};
+
+window.addEventListener("DOMContentLoaded", getRemainingTime);
