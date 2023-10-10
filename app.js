@@ -62,6 +62,11 @@ const getRemainingTime = () => {
     items.forEach((item, i) => {
       item.textContent = values[i] < 10 ? `0${values[i]}` : values[i];
     });
+
+    if (remainder < 0) {
+      clearInterval(getRemainingTime);
+      deadline.innerHTML = `<h4 class="expired">sorry, this giveaway has expired.</h4>`;
+    }
   }, 1000);
 };
 
